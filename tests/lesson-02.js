@@ -51,6 +51,7 @@ async function main() {
   // Run the student's test file and capture output
   let output = '';
   let runError = false;
+  let runCrashed = false;
   if (fs.existsSync(testFilePath)) {
     try {
       output = execSync('npx tsx manual-tests/calculateReadTime.test.ts', {
@@ -61,13 +62,16 @@ async function main() {
     } catch (err) {
       output = (err.stdout ?? '') + (err.stderr ?? '');
       runError = true;
+      // Stderr output indicates a crash (uncaught exception, import error, etc.)
+      // rather than a deliberate process.exit(1) from failing tests.
+      runCrashed = !!(err.stderr && err.stderr.trim().length > 0);
     }
   }
 
   results.push(
     check(
       'test file runs without errors',
-      fs.existsSync(testFilePath) && !runError,
+      fs.existsSync(testFilePath) && !runCrashed,
       'Running npx tsx manual-tests/calculateReadTime.test.ts should complete without throwing an unhandled error.',
     ),
   );
@@ -98,13 +102,13 @@ async function main() {
 
   results.push(
     check(
-      'all tests pass (no ❌ in output)',
-      output.includes('✅') && !output.includes('❌'),
-      'All your tests should produce ✅. Check that calculateReadTime returns the expected values.',
+      'all tests pass (exit code 0)',
+      fs.existsSync(testFilePath) && !runError,
+      'All your tests should pass. Make sure your test() helper tracks failures and calls process.exit(1) if any fail. Also check that calculateReadTime returns the expected values.',
     ),
   );
 
-  printResults(results, 'ZNAHNY');
+  printResults(results, 'MANUAL');
 }
 
 main().catch((err) => {

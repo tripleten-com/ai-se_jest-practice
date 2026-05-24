@@ -1,11 +1,14 @@
 import { slugify } from '../src/utils/slugify.js';
 
+let failures = 0;
+
 function test(description: string, fn: () => void): void {
   try {
     fn();
     console.log(`✅ ${description}`);
   } catch (err) {
     console.log(`❌ ${description}: ${(err as Error).message}`);
+    failures++;
   }
 }
 
@@ -34,3 +37,5 @@ test('removes special characters', () => {
 test('returns an empty string for empty input', () => {
   expect(slugify('')).toBe('');
 });
+
+process.exit(failures > 0 ? 1 : 0);

@@ -8,7 +8,7 @@ export default [
   ...tseslint.configs.recommended,
   prettierConfig,
   {
-    files: ['tests/**/*.js'],
+    files: ['tests/**/*.js', 'manual-tests/**/*.js'],
     languageOptions: {
       globals: {
         console: 'readonly',

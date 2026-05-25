@@ -80,7 +80,7 @@ async function main() {
     ),
   );
 
-  printResults(results, 'TESTS');
+  printResults(results, 'GRFGF');
 }
 
 main().catch((err) => {

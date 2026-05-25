@@ -67,7 +67,7 @@ async function main() {
     ),
   );
 
-  printResults(results, 'JEST');
+  printResults(results, 'WRFG');
 }
 
 main().catch((err) => {

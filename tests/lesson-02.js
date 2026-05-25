@@ -108,7 +108,7 @@ async function main() {
     ),
   );
 
-  printResults(results, 'MANUAL');
+  printResults(results, 'ZNAHNY');
 }
 
 main().catch((err) => {
